@@ -1,0 +1,10 @@
+/node_modules/
+/dist/
+/coverage/
+
+/giancosta86-*.tgz
+
+/yarn-debug.log*
+/yarn-error.log*
+
+/*.tsbuildinfo

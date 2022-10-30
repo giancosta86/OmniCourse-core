@@ -1,3 +1,4 @@
+import { Set } from "immutable";
 import { IsoDate } from "./IsoDate";
 
 describe("ISO date", () => {
@@ -29,6 +30,21 @@ describe("ISO date", () => {
       expect(() => {
         new IsoDate("1995-02");
       }).toThrow("Invalid date string: '1995-02'");
+    });
+  });
+
+  describe("instances having the same components", () => {
+    describe("when part of a set", () => {
+      it("should be equivalent", () => {
+        const dateString = "2022-04-22";
+
+        const originalDate = new IsoDate(dateString);
+        const identicalDate = new IsoDate(dateString);
+
+        const set = Set([originalDate]);
+
+        expect(set.has(identicalDate)).toBeTrue();
+      });
     });
   });
 });

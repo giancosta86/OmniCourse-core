@@ -1,4 +1,6 @@
-export class IsoDate {
+import { ValueObject } from "immutable";
+
+export class IsoDate implements ValueObject {
   readonly unboxed: Date;
 
   constructor(source: string) {
@@ -21,5 +23,17 @@ export class IsoDate {
     } catch {
       throw new Error(`Invalid date string: '${source}'`);
     }
+  }
+
+  equals(other: unknown): boolean {
+    if (!(other instanceof IsoDate)) {
+      return false;
+    }
+
+    return this.unboxed.getTime() == other.unboxed.getTime();
+  }
+
+  hashCode(): number {
+    return this.unboxed.getFullYear();
   }
 }

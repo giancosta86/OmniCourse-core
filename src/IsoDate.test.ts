@@ -3,9 +3,19 @@ import { IsoDate } from "./IsoDate";
 
 describe("ISO date", () => {
   describe("constructor", () => {
-    it("should parse a valid date", () => {
-      const isoDate = new IsoDate("1995-04-29");
-      expect(isoDate.unboxed).toEqual(new Date(1995, 3, 29));
+    it("should parse a date with 2-digit month and day", () => {
+      const isoDate = new IsoDate("1998-12-29");
+      expect(isoDate.unboxed).toEqual(new Date(1998, 11, 29));
+    });
+
+    it("should parse a date with 1-digit month and day", () => {
+      const isoDate = new IsoDate("1998-3-8");
+      expect(isoDate.unboxed).toEqual(new Date(1998, 2, 8));
+    });
+
+    it("should parse a date with zero-padded, 1-digit month and day", () => {
+      const isoDate = new IsoDate("1998-03-08");
+      expect(isoDate.unboxed).toEqual(new Date(1998, 2, 8));
     });
 
     it("should throw when parsing garbage input", () => {

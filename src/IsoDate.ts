@@ -36,4 +36,12 @@ export class IsoDate implements ValueObject {
   hashCode(): number {
     return this.unboxed.getFullYear();
   }
+
+  toString(): string {
+    const year = this.unboxed.getFullYear();
+    const month = this.unboxed.getMonth() + 1;
+    const day = this.unboxed.getDate();
+
+    return `${year}-${month}-${day}`;
+  }
 }

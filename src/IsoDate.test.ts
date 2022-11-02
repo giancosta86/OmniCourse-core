@@ -47,4 +47,26 @@ describe("ISO date", () => {
       });
     });
   });
+
+  describe("conversion to string", () => {
+    describe("when the month and the day have 1 digit", () => {
+      it("should have 1-digit components", () => {
+        const stringValue = "2009-5-9";
+
+        const date = new IsoDate(stringValue);
+
+        expect(date.toString()).toBe(stringValue);
+      });
+    });
+
+    describe("when the month and the day have 2 digits", () => {
+      it("should have 2-digit components", () => {
+        const stringValue = "2009-12-25";
+
+        const date = new IsoDate(stringValue);
+
+        expect(date.toString()).toBe(stringValue);
+      });
+    });
+  });
 });

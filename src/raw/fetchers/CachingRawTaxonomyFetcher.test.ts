@@ -3,6 +3,7 @@ import { TestRawTaxonomy } from "@/test";
 import { CachingRawTaxonomyFetcher } from "./CachingRawTaxonomyFetcher";
 import { TaxonomyId } from "./RawTaxonomyFetcher";
 import { FactoryRawTaxonomyFetcher } from "./FactoryRawTaxonomyFetcher";
+import { RawTaxonomy } from "../RawTaxonomy";
 
 describe("Retrieving via a caching RawTaxonomyFetcher", () => {
   const registeredId: TaxonomyId = "<REGISTERED ID>";
@@ -79,6 +80,18 @@ describe("Retrieving via a caching RawTaxonomyFetcher", () => {
         testLoopCount,
         unregisteredId
       );
+    });
+  });
+
+  describe("when a custom map builder factory is provided", () => {
+    it("should actually call it to create its map builder", () => {
+      const mapBuilderFactory = jest.fn(() =>
+        HashMap.builder<TaxonomyId, RawTaxonomy>()
+      );
+
+      CachingRawTaxonomyFetcher.create(factoryFetcher, mapBuilderFactory);
+
+      expect(mapBuilderFactory).toHaveBeenCalledOnce();
     });
   });
 });

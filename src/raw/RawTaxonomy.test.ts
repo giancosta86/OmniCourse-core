@@ -8,6 +8,20 @@ import { RawSubjects } from "./RawSubjects";
 
 describe("Raw taxonomy", () => {
   describe("localization", () => {
+    describe("when the locale is the same as the raw taxonomy's", () => {
+      it("should return the raw taxonomy", () => {
+        const source = TestRawTaxonomy.instance;
+
+        const localized = RawTaxonomy.localize(
+          source.locale,
+          new Dictionary(),
+          source
+        );
+
+        expect(localized).toBe(source);
+      });
+    });
+
     describe("when the translation map is empty", () => {
       it("should translate nothing, but change the locale", () => {
         const source = TestRawTaxonomy.instance;

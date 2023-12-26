@@ -19,6 +19,13 @@ export namespace RawTaxonomy {
     dictionary: Dictionary,
     source: RawTaxonomy
   ): RawTaxonomy {
+    if (
+      LocaleLike.toLanguageTag(locale) ==
+      LocaleLike.toLanguageTag(source.locale)
+    ) {
+      return source;
+    }
+
     const localizedName = dictionary.translate(source.name);
 
     const localizedRootSubjects = RawSubjects.localize(

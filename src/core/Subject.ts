@@ -17,11 +17,6 @@ type SubjectParams = Readonly<{
   hasSubjects: boolean;
 }>;
 
-/**
- * Named container of `Work` or other `Subject` (recursively) instances.
- *
- * It must be instantiated via its {@link create} static constructor.
- */
 export class Subject implements TaxonomyLevel, HasEquals {
   static create(
     locale: LocaleLike,
@@ -62,10 +57,6 @@ export class Subject implements TaxonomyLevel, HasEquals {
     });
   }
 
-  /**
-   * Internal method for creating a `Subject` from an internal JSON
-   * representation, **with no checks**
-   */
   static fromJson(subjectJson: SubjectJson): Subject {
     return new Subject({
       name: subjectJson.name,

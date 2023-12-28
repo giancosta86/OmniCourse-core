@@ -18,11 +18,6 @@ export type WorkOptionalFields = Readonly<
   }>
 >;
 
-/**
- * Didactic work - a course, a book, an app...
- *
- * It must be instantiated via its {@link create} static constructor.
- */
 export class Work implements HasEquals {
   static create(
     title: string,
@@ -47,10 +42,6 @@ export class Work implements HasEquals {
     });
   }
 
-  /**
-   * Internal method for creating a `Work` from an internal JSON
-   * representation, **with no checks**
-   */
   static fromJson(workJson: WorkJson): Work {
     return new Work({
       title: workJson.title,

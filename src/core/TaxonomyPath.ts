@@ -5,15 +5,7 @@ import { TaxonomyLevel } from "./TaxonomyLevel";
 import { Taxonomy } from "./Taxonomy";
 import { Subject } from "./Subject";
 
-/**
- * Sequence of `TaxonomyLevel` instances whose first item is a `Taxonomy`,
- * followed by a depth-first traversal of its `Subject` tree
- */
 export class TaxonomyPath {
-  /**
-   * Must be instantiated from a `Taxonomy`; more levels can be added
-   * via the {@link push} method
-   */
   static fromTaxonomy(taxonomy: Taxonomy): TaxonomyPath {
     return new TaxonomyPath(List.from<TaxonomyLevel>([taxonomy]));
   }

@@ -15,11 +15,6 @@ type TaxonomyParams = Readonly<{
   minutes: number;
 }>;
 
-/**
- * The fundamental aggregate root in this model.
- *
- * It must be instantiated via its {@link create} static constructor.
- */
 export class Taxonomy implements TaxonomyLevel, HasEquals {
   static create(
     locale: LocaleLike,
@@ -49,10 +44,6 @@ export class Taxonomy implements TaxonomyLevel, HasEquals {
     });
   }
 
-  /**
-   * Internal method for creating a `Taxonomy` from an internal JSON
-   * representation, **with no checks**
-   */
   static fromJson(taxonomyJson: TaxonomyJson): Taxonomy {
     return new Taxonomy({
       locale: LocaleLike.toLocale(taxonomyJson.locale),

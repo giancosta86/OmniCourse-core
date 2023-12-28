@@ -42,7 +42,7 @@ export class Work implements HasEquals {
     });
   }
 
-  static fromJson(workJson: WorkJson): Work {
+  static fromValidJson(workJson: WorkJson): Work {
     return new Work({
       title: workJson.title,
       minutes: workJson.minutes,

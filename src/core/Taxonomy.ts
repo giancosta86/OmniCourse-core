@@ -44,13 +44,13 @@ export class Taxonomy implements TaxonomyLevel, HasEquals {
     });
   }
 
-  static fromJson(taxonomyJson: TaxonomyJson): Taxonomy {
+  static fromValidJson(taxonomyJson: TaxonomyJson): Taxonomy {
     return new Taxonomy({
       locale: LocaleLike.toLocale(taxonomyJson.locale),
       name: taxonomyJson.name,
       minutes: taxonomyJson.minutes,
       items: OrderedHashSet.from(
-        taxonomyJson.items.map(Subject.fromJson)
+        taxonomyJson.items.map(Subject.fromValidJson)
       ).assumeNonEmpty()
     });
   }

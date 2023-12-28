@@ -57,17 +57,19 @@ export class Subject implements TaxonomyLevel, HasEquals {
     });
   }
 
-  static fromJson(subjectJson: SubjectJson): Subject {
+  static fromValidJson(subjectJson: SubjectJson): Subject {
     return new Subject({
       name: subjectJson.name,
       hasSubjects: subjectJson.hasSubjects,
       minutes: subjectJson.minutes,
       items: subjectJson.hasSubjects
         ? OrderedHashSet.from(
-            (subjectJson.items as readonly SubjectJson[]).map(Subject.fromJson)
+            (subjectJson.items as readonly SubjectJson[]).map(
+              Subject.fromValidJson
+            )
           ).assumeNonEmpty()
         : OrderedHashSet.from(
-            (subjectJson.items as readonly WorkJson[]).map(Work.fromJson)
+            (subjectJson.items as readonly WorkJson[]).map(Work.fromValidJson)
           ).assumeNonEmpty()
     });
   }

@@ -1,5 +1,5 @@
 export type ModelClass<TModel, TJson> = {
-  fromJson(json: TJson): TModel;
+  fromValidJson(json: TJson): TModel;
 };
 
 export type JsonNamespace<TModel, TJson> = {
@@ -18,7 +18,7 @@ export namespace JsonConversion {
 
         const json = jsonNamespace.from(sourceModel);
 
-        const restoredModel = modelClass.fromJson(json);
+        const restoredModel = modelClass.fromValidJson(json);
 
         expect(restoredModel).toEqual(sourceModel);
       });

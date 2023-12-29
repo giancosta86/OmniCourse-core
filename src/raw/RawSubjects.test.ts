@@ -4,14 +4,14 @@ import { Work, Subject } from "@/core";
 import { RawSubjects } from "./RawSubjects";
 
 describe("Raw subjects", () => {
-  describe("localization", () => {
+  describe("translation", () => {
     it("should work, recursively", () => {
       const dictionary = Dictionary.fromRawTranslations({
         Gamma: "Sigma",
         Delta: "Tau"
       });
 
-      const localized = RawSubjects.localize(dictionary, {
+      const translated = RawSubjects.translate(dictionary, {
         Alpha: [],
         Beta: {
           Gamma: []
@@ -19,7 +19,7 @@ describe("Raw subjects", () => {
         Delta: []
       });
 
-      expect(localized).toEqual({
+      expect(translated).toEqual({
         Alpha: [],
         Beta: {
           Sigma: []

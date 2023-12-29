@@ -9,15 +9,15 @@ export type RawSubjects = Readonly<{
 }>;
 
 export namespace RawSubjects {
-  export function localize(
+  export function translate(
     dictionary: Dictionary,
     rawSubjects: RawSubjects
   ): RawSubjects {
-    const localizedEntries = Object.entries(rawSubjects).map(rawSubject =>
-      RawSubject.localize(dictionary, rawSubject)
+    const translatedEntries = Object.entries(rawSubjects).map(rawSubject =>
+      RawSubject.translate(dictionary, rawSubject)
     );
 
-    return Object.fromEntries(localizedEntries);
+    return Object.fromEntries(translatedEntries);
   }
 
   export function reify(

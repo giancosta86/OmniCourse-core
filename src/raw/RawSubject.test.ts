@@ -5,7 +5,7 @@ import { RawSubject } from "./RawSubject";
 import { RawWorks } from "./RawWorks";
 
 describe("Raw subject", () => {
-  describe("localization", () => {
+  describe("translation", () => {
     describe("when containing works", () => {
       it("should translate just the subject name, NOT work titles", () => {
         const dictionary = Dictionary.fromRawTranslations({
@@ -13,12 +13,12 @@ describe("Raw subject", () => {
           Yogi: "Bubu"
         });
 
-        const localizedRawSubject = RawSubject.localize(dictionary, [
+        const translatedRawSubject = RawSubject.translate(dictionary, [
           "Yogi",
           [{ title: "Alpha", minutes: 92 }]
         ]);
 
-        expect(localizedRawSubject).toEqual([
+        expect(translatedRawSubject).toEqual([
           "Bubu",
           [{ title: "Alpha", minutes: 92 }]
         ]);
@@ -26,7 +26,7 @@ describe("Raw subject", () => {
     });
 
     describe("when containing other subjects", () => {
-      it("should localize all the subjects, recursively", () => {
+      it("should translate all the subjects, recursively", () => {
         const dictionary = Dictionary.fromRawTranslations({
           Alpha: "A",
           Beta: "B",
@@ -35,7 +35,7 @@ describe("Raw subject", () => {
           Yogi: "Bubu"
         });
 
-        const localizedRawSubject = RawSubject.localize(dictionary, [
+        const translatedRawSubject = RawSubject.translate(dictionary, [
           "Yogi",
           {
             Alpha: [{ title: "Cip", minutes: 92 }],
@@ -43,7 +43,7 @@ describe("Raw subject", () => {
           }
         ]);
 
-        expect(localizedRawSubject).toEqual([
+        expect(translatedRawSubject).toEqual([
           "Bubu",
           {
             A: [{ title: "Cip", minutes: 92 }],

@@ -7,14 +7,14 @@ import { RawTaxonomy } from "./RawTaxonomy";
 import { RawSubjects } from "./RawSubjects";
 
 describe("Raw taxonomy", () => {
-  describe("localization", () => {
+  describe("translation", () => {
     describe("when the translation map is empty", () => {
       it("should translate nothing", () => {
         const source = TestRawTaxonomy.instance;
 
-        const localized = RawTaxonomy.localize(new Dictionary(), source);
+        const translated = RawTaxonomy.translate(new Dictionary(), source);
 
-        expect(localized).toEqual(source);
+        expect(translated).toEqual(source);
       });
     });
 
@@ -22,14 +22,14 @@ describe("Raw taxonomy", () => {
       it("should translate nothing", () => {
         const source = TestRawTaxonomy.instance;
 
-        const localized = RawTaxonomy.localize(
+        const translated = RawTaxonomy.translate(
           Dictionary.fromRawTranslations({
             "<INEXISTING>": "Some translation"
           }),
           source
         );
 
-        expect(localized).toEqual(source);
+        expect(translated).toEqual(source);
       });
     });
 
@@ -38,17 +38,17 @@ describe("Raw taxonomy", () => {
         const source = TestRawTaxonomy.instance;
 
         const dictionary = Dictionary.fromRawTranslations({
-          [source.name]: "Localized taxonomy name",
+          [source.name]: "Translated taxonomy name",
           Alpha: "Ro",
           Beta: "Sigma",
           Delta: "Omicron",
           Yogi: "Crocus"
         });
 
-        const localized = RawTaxonomy.localize(dictionary, source);
+        const translated = RawTaxonomy.translate(dictionary, source);
 
-        expect(localized).toEqual({
-          name: "Localized taxonomy name",
+        expect(translated).toEqual({
+          name: "Translated taxonomy name",
           rootSubjects: {
             Ro: {
               Sigma: [Work.create("Yogi", 90), Work.create("Bubu", 92)],

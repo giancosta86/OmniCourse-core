@@ -9,17 +9,17 @@ export type RawSubject = [name: string, items: RawSubjectItems];
 export type RawSubjectItems = RawSubjects | RawWorks;
 
 export namespace RawSubject {
-  export function localize(
+  export function translate(
     dictionary: Dictionary,
     [name, items]: RawSubject
   ): RawSubject {
     const translatedName = dictionary.translate(name);
 
-    const localizedItems = Iterable.isSupported(items)
+    const translatedItems = Iterable.isSupported(items)
       ? (items as RawWorks)
-      : RawSubjects.localize(dictionary, items as RawSubjects);
+      : RawSubjects.translate(dictionary, items as RawSubjects);
 
-    return [translatedName, localizedItems];
+    return [translatedName, translatedItems];
   }
 
   export function reify(

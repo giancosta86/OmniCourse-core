@@ -44,8 +44,6 @@
 
 - `RawTaxonomy` also includes a `Locale`
 
-- `LocalizedRawTaxonomyFetcher` was introduced to support i18n
-
 - `toTaxonomy()` has been renamed to `RawTaxonomy.reify()`,
 
 - JSON serialization now supported via `WorkJson.from()`, `SubjectJson.from()` and `TaxonomyJson.from()`, as well as by the `fromJson()` static constructors

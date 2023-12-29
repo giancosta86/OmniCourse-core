@@ -13,20 +13,20 @@ export type RawTaxonomy = Readonly<{
 }>;
 
 export namespace RawTaxonomy {
-  export function localize(
+  export function translate(
     dictionary: Dictionary,
     source: RawTaxonomy
   ): RawTaxonomy {
-    const localizedName = dictionary.translate(source.name);
+    const translatedName = dictionary.translate(source.name);
 
-    const localizedRootSubjects = RawSubjects.localize(
+    const translatedRootSubjects = RawSubjects.translate(
       dictionary,
       source.rootSubjects
     );
 
     return {
-      name: localizedName,
-      rootSubjects: localizedRootSubjects
+      name: translatedName,
+      rootSubjects: translatedRootSubjects
     };
   }
 

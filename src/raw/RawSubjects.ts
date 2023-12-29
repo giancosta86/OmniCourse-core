@@ -1,6 +1,7 @@
+import { List } from "@rimbu/list";
 import { Stream } from "@rimbu/stream";
 import { Dictionary, LocaleLike } from "@giancosta86/hermes";
-import { Subject } from "@/core";
+import { Subject, Subjects } from "@/core";
 import { RawSubjectItems, RawSubject } from "./RawSubject";
 
 export type RawSubjects = Readonly<{
@@ -22,10 +23,14 @@ export namespace RawSubjects {
   export function reify(
     locale: LocaleLike,
     rawSubjects: RawSubjects
-  ): Iterable<Subject> {
-    return Stream.from(Object.entries(rawSubjects)).flatMap(rawSubject => {
-      const subject = RawSubject.reify(locale, rawSubject);
-      return subject ? [subject] : [];
-    });
+  ): List<Subject> {
+    const reifiedIterable = Stream.from(Object.entries(rawSubjects)).flatMap(
+      rawSubject => {
+        const subject = RawSubject.reify(locale, rawSubject);
+        return subject ? [subject] : [];
+      }
+    );
+
+    return Subjects.createSortedList(locale, reifiedIterable);
   }
 }

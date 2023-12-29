@@ -1,56 +1,35 @@
 import { Dictionary } from "@giancosta86/hermes";
 import { ExpressiveUrl } from "@giancosta86/swan-lake";
 import { IsoDate } from "@giancosta86/time-utils";
-import { Work } from "@/core";
-import { TestTaxonomy, TestSubject, TestRawTaxonomy } from "@/test";
+import { Taxonomy, Subject, Work } from "@/core";
+import { Test, TestRawTaxonomy } from "@/test";
 import { RawTaxonomy } from "./RawTaxonomy";
 import { RawSubjects } from "./RawSubjects";
 
 describe("Raw taxonomy", () => {
   describe("localization", () => {
-    describe("when the locale is the same as the raw taxonomy's", () => {
-      it("should return the raw taxonomy", () => {
-        const source = TestRawTaxonomy.instance;
-
-        const localized = RawTaxonomy.localize(
-          source.locale,
-          new Dictionary(),
-          source
-        );
-
-        expect(localized).toBe(source);
-      });
-    });
-
     describe("when the translation map is empty", () => {
-      it("should translate nothing, but change the locale", () => {
+      it("should translate nothing", () => {
         const source = TestRawTaxonomy.instance;
 
-        const expected = TestRawTaxonomy.customize({ locale: "zh" });
+        const localized = RawTaxonomy.localize(new Dictionary(), source);
 
-        const localized = RawTaxonomy.localize("zh", new Dictionary(), source);
-
-        expect(localized).toEqual(expected);
-        expect(localized.locale).not.toBe(source.locale);
+        expect(localized).toEqual(source);
       });
     });
 
     describe("when the translation map contains just one non-matching entry", () => {
-      it("should translate nothing, but change the locale", () => {
+      it("should translate nothing", () => {
         const source = TestRawTaxonomy.instance;
 
-        const expected = TestRawTaxonomy.customize({ locale: "zh" });
-
         const localized = RawTaxonomy.localize(
-          "zh",
           Dictionary.fromRawTranslations({
             "<INEXISTING>": "Some translation"
           }),
           source
         );
 
-        expect(localized).toEqual(expected);
-        expect(localized.locale).not.toBe(source.locale);
+        expect(localized).toEqual(source);
       });
     });
 
@@ -66,9 +45,10 @@ describe("Raw taxonomy", () => {
           Yogi: "Crocus"
         });
 
-        const expected: RawTaxonomy = {
+        const localized = RawTaxonomy.localize(dictionary, source);
+
+        expect(localized).toEqual({
           name: "Localized taxonomy name",
-          locale: "zh",
           rootSubjects: {
             Ro: {
               Sigma: [Work.create("Yogi", 90), Work.create("Bubu", 92)],
@@ -77,12 +57,7 @@ describe("Raw taxonomy", () => {
 
             Omicron: [Work.create("Alpha", 98)]
           }
-        };
-
-        const localized = RawTaxonomy.localize("zh", dictionary, source);
-
-        expect(localized).toEqual(expected);
-        expect(localized.locale).not.toBe(source.locale);
+        });
       });
     });
   });
@@ -92,6 +67,7 @@ describe("Raw taxonomy", () => {
       describe("in the most basic scenario", () => {
         it("should work", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -105,10 +81,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
-                Work.create("Basic work", 90)
-              ])
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [Work.create("Basic work", 90)])
             ])
           );
         });
@@ -117,6 +91,7 @@ describe("Raw taxonomy", () => {
       describe("when numbers are written as string literals", () => {
         it("should parse them anyway", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -130,10 +105,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
-                Work.create("Basic work", 90)
-              ])
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [Work.create("Basic work", 90)])
             ])
           );
         });
@@ -163,6 +136,7 @@ describe("Raw taxonomy", () => {
         ({ originalMinutes, expectedMinutes, expectedRounding }) => {
           it(`should round to ${expectedRounding}`, () => {
             const taxonomy = RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -176,8 +150,8 @@ describe("Raw taxonomy", () => {
             );
 
             expect(taxonomy).toEqual(
-              TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-                TestSubject.create("First subject", [
+              Taxonomy.create(TestRawTaxonomy.instance.name, [
+                Subject.create("First subject", [
                   Work.create("Basic work", expectedMinutes)
                 ])
               ])
@@ -189,6 +163,7 @@ describe("Raw taxonomy", () => {
       describe("when a work has all the fields", () => {
         it("should work", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -206,8 +181,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [
                 Work.create("Full work", 90, {
                   kind: "Book",
                   completionDate: new IsoDate("2019-03-18"),
@@ -225,6 +200,7 @@ describe("Raw taxonomy", () => {
       describe("when a work has all the fields plus the 'portal' field from v1", () => {
         it("should still be parsed", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -243,8 +219,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [
                 Work.create("Extra work", 90, {
                   kind: "Book",
                   completionDate: new IsoDate("2019-03-18"),
@@ -263,6 +239,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "": [
@@ -282,6 +259,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -300,6 +278,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -318,6 +297,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -337,6 +317,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -357,6 +338,7 @@ describe("Raw taxonomy", () => {
         it("should throw", () => {
           expect(() => {
             RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -378,6 +360,7 @@ describe("Raw taxonomy", () => {
       describe("with two first-level subjects and some works", () => {
         it("should work", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -403,13 +386,13 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("Second subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("Second subject", [
                 Work.create("Beta", 90),
                 Work.create("Alpha", 5)
               ]),
 
-              TestSubject.create("First subject", [Work.create("Gamma", 37)])
+              Subject.create("First subject", [Work.create("Gamma", 37)])
             ])
           );
         });
@@ -418,6 +401,7 @@ describe("Raw taxonomy", () => {
       describe("with nested subjects and some works", () => {
         it("should work", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First-level subject": {
@@ -461,22 +445,22 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("Another first-level subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("Another first-level subject", [
                 Work.create("Epsilon", 202)
               ]),
 
-              TestSubject.create("First-level subject", [
-                TestSubject.create("Another second-level subject", [
+              Subject.create("First-level subject", [
+                Subject.create("Another second-level subject", [
                   Work.create("Delta", 89)
                 ]),
-                TestSubject.create("Second-level subject", [
-                  TestSubject.create("Third-level subject", [
+                Subject.create("Second-level subject", [
+                  Subject.create("Third-level subject", [
                     Work.create("Alpha", 24),
                     Work.create("Beta", 6)
                   ]),
 
-                  TestSubject.create("Another third-level subject", [
+                  Subject.create("Another third-level subject", [
                     Work.create("Gamma", 8)
                   ])
                 ])
@@ -506,7 +490,7 @@ describe("Raw taxonomy", () => {
 
           const rawTaxonomy = TestRawTaxonomy.customize({ rootSubjects });
 
-          const taxonomy = RawTaxonomy.reify(rawTaxonomy);
+          const taxonomy = RawTaxonomy.reify(Test.locale, rawTaxonomy);
           expect(taxonomy.minutes).toBe(7);
         });
       });
@@ -518,6 +502,7 @@ describe("Raw taxonomy", () => {
           it("should throw", () => {
             expect(() => {
               RawTaxonomy.reify(
+                Test.locale,
                 TestRawTaxonomy.customize({
                   rootSubjects: {
                     "First subject": [
@@ -542,6 +527,7 @@ describe("Raw taxonomy", () => {
           it("should throw", () => {
             expect(() =>
               RawTaxonomy.reify(
+                Test.locale,
                 TestRawTaxonomy.customize({
                   rootSubjects: {
                     "First subject": [
@@ -566,6 +552,7 @@ describe("Raw taxonomy", () => {
       describe("when only one work has completion date", () => {
         it("should let both works coexist", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -585,8 +572,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [
                 Work.create("Alpha", 90),
                 Work.create("Alpha", 90, {
                   completionDate: new IsoDate("2019-04-29")
@@ -600,6 +587,7 @@ describe("Raw taxonomy", () => {
       describe("when they have different completion dates", () => {
         it("should let both works coexist", () => {
           const taxonomy = RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               rootSubjects: {
                 "First subject": [
@@ -620,8 +608,8 @@ describe("Raw taxonomy", () => {
           );
 
           expect(taxonomy).toEqual(
-            TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-              TestSubject.create("First subject", [
+            Taxonomy.create(TestRawTaxonomy.instance.name, [
+              Subject.create("First subject", [
                 Work.create("Alpha", 90, {
                   completionDate: new IsoDate("2021-08-12")
                 }),
@@ -638,6 +626,7 @@ describe("Raw taxonomy", () => {
         describe("when they have different durations", () => {
           it("should let both works coexist", () => {
             const taxonomy = RawTaxonomy.reify(
+              Test.locale,
               TestRawTaxonomy.customize({
                 rootSubjects: {
                   "First subject": [
@@ -658,8 +647,8 @@ describe("Raw taxonomy", () => {
             );
 
             expect(taxonomy).toEqual(
-              TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-                TestSubject.create("First subject", [
+              Taxonomy.create(TestRawTaxonomy.instance.name, [
+                Subject.create("First subject", [
                   Work.create("Alpha", 90, {
                     completionDate: new IsoDate("2019-04-29")
                   }),
@@ -676,6 +665,7 @@ describe("Raw taxonomy", () => {
           it("should throw", () => {
             expect(() => {
               RawTaxonomy.reify(
+                Test.locale,
                 TestRawTaxonomy.customize({
                   rootSubjects: {
                     "First subject": [
@@ -703,6 +693,7 @@ describe("Raw taxonomy", () => {
     describe("of a taxonomy also having empty subjects", () => {
       it("should keep just the non-empty subjects", () => {
         const taxonomy = RawTaxonomy.reify(
+          Test.locale,
           TestRawTaxonomy.customize({
             rootSubjects: {
               "First subject": {
@@ -749,14 +740,14 @@ describe("Raw taxonomy", () => {
         );
 
         expect(taxonomy).toEqual(
-          TestTaxonomy.create(TestRawTaxonomy.instance.name, [
-            TestSubject.create("First subject", [
-              TestSubject.create("Second subject", [
-                TestSubject.create("Third subject", [
+          Taxonomy.create(TestRawTaxonomy.instance.name, [
+            Subject.create("First subject", [
+              Subject.create("Second subject", [
+                Subject.create("Third subject", [
                   Work.create("Beta", 90),
                   Work.create("Alpha", 45)
                 ]),
-                TestSubject.create("Core subject", [Work.create("Tau", 87)])
+                Subject.create("Core subject", [Work.create("Tau", 87)])
               ])
             ])
           ])
@@ -768,6 +759,7 @@ describe("Raw taxonomy", () => {
       it("should throw", () => {
         expect(() => {
           RawTaxonomy.reify(
+            Test.locale,
             TestRawTaxonomy.customize({
               name: "Blank taxonomy",
               rootSubjects: {

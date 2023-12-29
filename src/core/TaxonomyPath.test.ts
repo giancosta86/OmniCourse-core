@@ -1,11 +1,12 @@
-import { TestTaxonomy, TestSubject } from "@/test";
+import { Subject } from "./Subject";
+import { Taxonomy } from "./Taxonomy";
 import { TaxonomyPath } from "./TaxonomyPath";
 import { Work } from "./Work";
 
 describe("Taxonomy path", () => {
   it("should be created from a taxonomy", () => {
-    const taxonomy = TestTaxonomy.create("My taxonomy", [
-      TestSubject.create("My subject", [
+    const taxonomy = Taxonomy.create("My taxonomy", [
+      Subject.create("My subject", [
         Work.create("Alpha", 90),
         Work.create("Beta", 5)
       ])
@@ -21,12 +22,12 @@ describe("Taxonomy path", () => {
   describe("pushing a subject", () => {
     describe("if the subject belongs to the current level of the path", () => {
       it("should work", () => {
-        const firstSubject = TestSubject.create("My subject", [
+        const firstSubject = Subject.create("My subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy).push(firstSubject);
 
@@ -38,16 +39,14 @@ describe("Taxonomy path", () => {
 
     describe("if the subject does not belong to the current level of the path", () => {
       it("should throw", () => {
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy);
 
@@ -61,17 +60,17 @@ describe("Taxonomy path", () => {
 
     describe("if the current level of the path only has works", () => {
       it("should throw", () => {
-        const alternativeSubject = TestSubject.create("Alternative subject", [
+        const alternativeSubject = Subject.create("Alternative subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
+        const firstSubject = Subject.create("First subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [
+        const taxonomy = Taxonomy.create("My taxonomy", [
           firstSubject,
           alternativeSubject
         ]);
@@ -90,20 +89,16 @@ describe("Taxonomy path", () => {
   describe("Reverting to a level", () => {
     describe("if the target level is the taxonomy", () => {
       it("should work", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -119,20 +114,16 @@ describe("Taxonomy path", () => {
 
     describe("if the target level is a previous subject level", () => {
       it("should work", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -148,20 +139,16 @@ describe("Taxonomy path", () => {
 
     describe("if the target level is the current subject level", () => {
       it("should work", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -186,20 +173,16 @@ describe("Taxonomy path", () => {
 
     describe("if the target level is not in the path", () => {
       it("should throw", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         expect(() => {
           TaxonomyPath.fromTaxonomy(taxonomy)
@@ -216,21 +199,19 @@ describe("Taxonomy path", () => {
   describe("requesting a meaningful level upon creation", () => {
     describe("if the taxonomy has at least 2 subjects", () => {
       it("should remain at taxonomy level", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          thirdSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [thirdSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [
+        const taxonomy = Taxonomy.create("My taxonomy", [
           firstSubject,
           secondSubject
         ]);
@@ -245,26 +226,24 @@ describe("Taxonomy path", () => {
 
     describe("until it finds a level having at least 2 subjects", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           thirdSubject,
           fourthSubject
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy).toMeaningful();
 
@@ -280,24 +259,18 @@ describe("Taxonomy path", () => {
 
     describe("until it finds a level having works", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
-          fourthSubject
-        ]);
+        const thirdSubject = Subject.create("Third subject", [fourthSubject]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy).toMeaningful();
 
@@ -322,26 +295,24 @@ describe("Taxonomy path", () => {
   describe("pushing to a meaningful level", () => {
     describe("until it finds a level having at least 2 subjects", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           thirdSubject,
           fourthSubject
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -359,24 +330,18 @@ describe("Taxonomy path", () => {
 
     describe("until it finds a level having works", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
-          fourthSubject
-        ]);
+        const thirdSubject = Subject.create("Third subject", [fourthSubject]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -403,21 +368,19 @@ describe("Taxonomy path", () => {
   describe("reverting to a meaningful level", () => {
     describe("if the target level has at least 2 subjects", () => {
       it("should revert to the target level", () => {
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          thirdSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [thirdSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [
+        const taxonomy = Taxonomy.create("My taxonomy", [
           firstSubject,
           secondSubject
         ]);
@@ -436,26 +399,24 @@ describe("Taxonomy path", () => {
 
     describe("until it finds a level having at least 2 subjects", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Gamma", 37),
           Work.create("Delta", 58)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
+        const thirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const secondSubject = TestSubject.create("Second subject", [
+        const secondSubject = Subject.create("Second subject", [
           thirdSubject,
           fourthSubject
         ]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -474,24 +435,18 @@ describe("Taxonomy path", () => {
 
     describe("until it finds a level having works", () => {
       it("should drill down", () => {
-        const fourthSubject = TestSubject.create("Fourth subject", [
+        const fourthSubject = Subject.create("Fourth subject", [
           Work.create("Alpha", 90),
           Work.create("Beta", 5)
         ]);
 
-        const thirdSubject = TestSubject.create("Third subject", [
-          fourthSubject
-        ]);
+        const thirdSubject = Subject.create("Third subject", [fourthSubject]);
 
-        const secondSubject = TestSubject.create("Second subject", [
-          thirdSubject
-        ]);
+        const secondSubject = Subject.create("Second subject", [thirdSubject]);
 
-        const firstSubject = TestSubject.create("First subject", [
-          secondSubject
-        ]);
+        const firstSubject = Subject.create("First subject", [secondSubject]);
 
-        const taxonomy = TestTaxonomy.create("My taxonomy", [firstSubject]);
+        const taxonomy = Taxonomy.create("My taxonomy", [firstSubject]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
           .push(firstSubject)
@@ -519,8 +474,8 @@ describe("Taxonomy path", () => {
   describe("top subjects in previous levels", () => {
     describe("when the path has just the taxonomy", () => {
       it("should be zero", () => {
-        const taxonomy = TestTaxonomy.create("Test", [
-          TestSubject.create("First", [Work.create("Alpha", 90)])
+        const taxonomy = Taxonomy.create("Test", [
+          Subject.create("First", [Work.create("Alpha", 90)])
         ]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy);
@@ -531,19 +486,19 @@ describe("Taxonomy path", () => {
 
     describe("when the path has just 2 levels", () => {
       it("should return the number of subjects directly owned by the taxonomy", () => {
-        const firstSubject = TestSubject.create("First", [
+        const firstSubject = Subject.create("First", [
           Work.create("Alpha", 90)
         ]);
 
-        const taxonomy = TestTaxonomy.create("Test", [
+        const taxonomy = Taxonomy.create("Test", [
           firstSubject,
-          TestSubject.create("Second", [
+          Subject.create("Second", [
             Work.create("Beta", 7),
             Work.create("Gamma", 9),
             Work.create("Delta", 18),
             Work.create("Epsilon", 45)
           ]),
-          TestSubject.create("Third", [Work.create("Zeta", 95)])
+          Subject.create("Third", [Work.create("Zeta", 95)])
         ]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy).push(firstSubject);
@@ -554,26 +509,26 @@ describe("Taxonomy path", () => {
 
     describe("when the path has more than 2 levels", () => {
       it("should sum the number of subjects directly owned by each previous level", () => {
-        const thirdSubject = TestSubject.create("Third", [
-          TestSubject.create("Fourth", [Work.create("Alpha", 90)])
+        const thirdSubject = Subject.create("Third", [
+          Subject.create("Fourth", [Work.create("Alpha", 90)])
         ]);
 
-        const secondSubject = TestSubject.create("Second", [
+        const secondSubject = Subject.create("Second", [
           thirdSubject,
-          TestSubject.create("Third-bis", [Work.create("Eta", 32)])
+          Subject.create("Third-bis", [Work.create("Eta", 32)])
         ]);
 
-        const firstSubject = TestSubject.create("First", [
+        const firstSubject = Subject.create("First", [
           secondSubject,
-          TestSubject.create("Second-bis", [Work.create("Beta", 95)]),
-          TestSubject.create("Second-tris", [Work.create("Gamma", 92)])
+          Subject.create("Second-bis", [Work.create("Beta", 95)]),
+          Subject.create("Second-tris", [Work.create("Gamma", 92)])
         ]);
 
-        const taxonomy = TestTaxonomy.create("Test", [
+        const taxonomy = Taxonomy.create("Test", [
           firstSubject,
-          TestSubject.create("First-bis", [Work.create("Delta", 7)]),
-          TestSubject.create("First-tris", [Work.create("Epsilon", 9)]),
-          TestSubject.create("First-quatuor", [Work.create("Zeta", 98)])
+          Subject.create("First-bis", [Work.create("Delta", 7)]),
+          Subject.create("First-tris", [Work.create("Epsilon", 9)]),
+          Subject.create("First-quatuor", [Work.create("Zeta", 98)])
         ]);
 
         const path = TaxonomyPath.fromTaxonomy(taxonomy)
@@ -589,16 +544,16 @@ describe("Taxonomy path", () => {
   describe("navigating a taxonomy", () => {
     describe("when all the path levels are in the taxonomy", () => {
       it("should return the path itself", () => {
-        const initialThirdSubject = TestSubject.create("Third subject", [
+        const initialThirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90)
         ]);
-        const initialSecondSubject = TestSubject.create("Second subject", [
+        const initialSecondSubject = Subject.create("Second subject", [
           initialThirdSubject
         ]);
-        const initialFirstSubject = TestSubject.create("First subject", [
+        const initialFirstSubject = Subject.create("First subject", [
           initialSecondSubject
         ]);
-        const initialTaxonomy = TestTaxonomy.create("Initial taxonomy", [
+        const initialTaxonomy = Taxonomy.create("Initial taxonomy", [
           initialFirstSubject
         ]);
 
@@ -607,17 +562,16 @@ describe("Taxonomy path", () => {
           .push(initialSecondSubject)
           .push(initialThirdSubject);
 
-        const nextThirdSubject = TestSubject.create(initialThirdSubject.name, [
+        const nextThirdSubject = Subject.create(initialThirdSubject.name, [
           Work.create("Beta", 50)
         ]);
-        const nextSecondSubject = TestSubject.create(
-          initialSecondSubject.name,
-          [nextThirdSubject]
-        );
-        const nextFirstSubject = TestSubject.create(initialFirstSubject.name, [
+        const nextSecondSubject = Subject.create(initialSecondSubject.name, [
+          nextThirdSubject
+        ]);
+        const nextFirstSubject = Subject.create(initialFirstSubject.name, [
           nextSecondSubject
         ]);
-        const nextTaxonomy = TestTaxonomy.create("Next taxonomy", [
+        const nextTaxonomy = Taxonomy.create("Next taxonomy", [
           nextFirstSubject
         ]);
 
@@ -634,16 +588,16 @@ describe("Taxonomy path", () => {
 
     describe("when only part of the path levels are in the taxonomy", () => {
       it("should navigate up to the deepest level supported by the taxonomy", () => {
-        const initialThirdSubject = TestSubject.create("Third subject", [
+        const initialThirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90)
         ]);
-        const initialSecondSubject = TestSubject.create("Second subject", [
+        const initialSecondSubject = Subject.create("Second subject", [
           initialThirdSubject
         ]);
-        const initialFirstSubject = TestSubject.create("First subject", [
+        const initialFirstSubject = Subject.create("First subject", [
           initialSecondSubject
         ]);
-        const initialTaxonomy = TestTaxonomy.create("Initial taxonomy", [
+        const initialTaxonomy = Taxonomy.create("Initial taxonomy", [
           initialFirstSubject
         ]);
 
@@ -652,14 +606,13 @@ describe("Taxonomy path", () => {
           .push(initialSecondSubject)
           .push(initialThirdSubject);
 
-        const nextSecondSubject = TestSubject.create(
-          initialSecondSubject.name,
-          [Work.create("Gamma", 87)]
-        );
-        const nextFirstSubject = TestSubject.create(initialFirstSubject.name, [
+        const nextSecondSubject = Subject.create(initialSecondSubject.name, [
+          Work.create("Gamma", 87)
+        ]);
+        const nextFirstSubject = Subject.create(initialFirstSubject.name, [
           nextSecondSubject
         ]);
-        const nextTaxonomy = TestTaxonomy.create("Next taxonomy", [
+        const nextTaxonomy = Taxonomy.create("Next taxonomy", [
           nextFirstSubject
         ]);
 
@@ -675,16 +628,16 @@ describe("Taxonomy path", () => {
 
     describe("when the first level of the taxonomy does not match the path", () => {
       it("should return a path with just the taxonomy", () => {
-        const initialThirdSubject = TestSubject.create("Third subject", [
+        const initialThirdSubject = Subject.create("Third subject", [
           Work.create("Alpha", 90)
         ]);
-        const initialSecondSubject = TestSubject.create("Second subject", [
+        const initialSecondSubject = Subject.create("Second subject", [
           initialThirdSubject
         ]);
-        const initialFirstSubject = TestSubject.create("First subject", [
+        const initialFirstSubject = Subject.create("First subject", [
           initialSecondSubject
         ]);
-        const initialTaxonomy = TestTaxonomy.create("Initial taxonomy", [
+        const initialTaxonomy = Taxonomy.create("Initial taxonomy", [
           initialFirstSubject
         ]);
 
@@ -693,17 +646,16 @@ describe("Taxonomy path", () => {
           .push(initialSecondSubject)
           .push(initialThirdSubject);
 
-        const nextThirdSubject = TestSubject.create(initialThirdSubject.name, [
+        const nextThirdSubject = Subject.create(initialThirdSubject.name, [
           Work.create("Beta", 50)
         ]);
-        const nextSecondSubject = TestSubject.create(
-          initialSecondSubject.name,
-          [nextThirdSubject]
-        );
-        const nextFirstSubject = TestSubject.create("UNKNOWN SUBJECT", [
+        const nextSecondSubject = Subject.create(initialSecondSubject.name, [
+          nextThirdSubject
+        ]);
+        const nextFirstSubject = Subject.create("UNKNOWN SUBJECT", [
           nextSecondSubject
         ]);
-        const nextTaxonomy = TestTaxonomy.create("Next taxonomy", [
+        const nextTaxonomy = Taxonomy.create("Next taxonomy", [
           nextFirstSubject
         ]);
 

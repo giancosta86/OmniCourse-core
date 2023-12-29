@@ -1,5 +1,5 @@
 import { Equality } from "@giancosta86/more-jest";
-import { JsonConversion, TestSubject, TestSubjects, TestWorks } from "@/test";
+import { JsonConversion, TestSubjects, TestWorks } from "@/test";
 import { SubjectJson } from "@/json";
 import { Work } from "./Work";
 import { Subject } from "./Subject";
@@ -9,7 +9,7 @@ describe("Subject", () => {
     describe("when the name is empty", () => {
       it("should throw", () => {
         expect(() => {
-          TestSubject.create("", [Work.create("Test", 90)]);
+          Subject.create("", [Work.create("Test", 90)]);
         }).toThrow("Empty subject name");
       });
     });
@@ -17,7 +17,7 @@ describe("Subject", () => {
     describe("when no items are passed", () => {
       it("should throw", () => {
         expect(() => {
-          TestSubject.create("MySubject", []);
+          Subject.create("MySubject", []);
         }).toThrow("No items for subject 'MySubject'");
       });
     });
@@ -25,7 +25,7 @@ describe("Subject", () => {
     describe("when receiving duplicate works", () => {
       it("should throw", () => {
         expect(() => {
-          TestSubject.create("Test subject", [
+          Subject.create("Test subject", [
             Work.create("Alpha", 90),
             Work.create("Beta", 23),
             Work.create("Alpha", 70)
@@ -37,13 +37,13 @@ describe("Subject", () => {
     describe("when receiving duplicate subjects", () => {
       it("should throw ", () => {
         expect(() => {
-          TestSubject.create("Test subject", [
-            TestSubject.create("Ro", [
+          Subject.create("Test subject", [
+            Subject.create("Ro", [
               Work.create("Alpha", 90),
               Work.create("Beta", 23)
             ]),
 
-            TestSubject.create("Ro", [Work.create("Gamma", 58)])
+            Subject.create("Ro", [Work.create("Gamma", 58)])
           ]);
         }).toThrow("Duplicate subject: 'Ro'");
       });
@@ -52,7 +52,7 @@ describe("Subject", () => {
 
   describe("minutes", () => {
     it("should be the sum of its works' minutes", () => {
-      const subject = TestSubject.create("Test subject", [
+      const subject = Subject.create("Test subject", [
         Work.create("Alpha", 90),
         Work.create("Beta", 5)
       ]);
@@ -61,18 +61,18 @@ describe("Subject", () => {
     });
 
     it("should be the sum of its subjects' minutes", () => {
-      const thirdSubject = TestSubject.create("Third subject", [
+      const thirdSubject = Subject.create("Third subject", [
         Work.create("Alpha", 90),
         Work.create("Beta", 85)
       ]);
 
-      const secondSubject = TestSubject.create("Second subject", [
+      const secondSubject = Subject.create("Second subject", [
         Work.create("Gamma", 3),
         Work.create("Delta", 7),
         Work.create("Epsilon", 19)
       ]);
 
-      const firstSubject = TestSubject.create("First subject", [
+      const firstSubject = Subject.create("First subject", [
         secondSubject,
         thirdSubject
       ]);
@@ -81,12 +81,12 @@ describe("Subject", () => {
     });
 
     it("should be the sum of its descendant items', recursively", () => {
-      const thirdLevelSubject = TestSubject.create("Third-level subject", [
+      const thirdLevelSubject = Subject.create("Third-level subject", [
         Work.create("Alpha", 12),
         Work.create("Beta", 4)
       ]);
 
-      const anotherThirdLevelSubject = TestSubject.create(
+      const anotherThirdLevelSubject = Subject.create(
         "Another third-level subject",
         [
           Work.create("Gamma", 3),
@@ -95,17 +95,17 @@ describe("Subject", () => {
         ]
       );
 
-      const secondLevelSubject = TestSubject.create("Second-level subject", [
+      const secondLevelSubject = Subject.create("Second-level subject", [
         thirdLevelSubject,
         anotherThirdLevelSubject
       ]);
 
-      const anotherSecondLevelSubject = TestSubject.create(
+      const anotherSecondLevelSubject = Subject.create(
         "Another second-level subject",
         [Work.create("Zeta", 45), Work.create("Eta", 2)]
       );
 
-      const firstLevelSubject = TestSubject.create("First subject", [
+      const firstLevelSubject = Subject.create("First subject", [
         secondLevelSubject,
         anotherSecondLevelSubject
       ]);
@@ -117,7 +117,7 @@ describe("Subject", () => {
   describe("hasSubjects", () => {
     describe("when the items are works", () => {
       it("should be false", () => {
-        const subject = TestSubject.create("Test", [Work.create("Alpha", 45)]);
+        const subject = Subject.create("Test", [Work.create("Alpha", 45)]);
 
         expect(subject.hasSubjects).toBe(false);
       });
@@ -125,8 +125,8 @@ describe("Subject", () => {
 
     describe("when the items are subjects", () => {
       it("should be true", () => {
-        const firstSubject = TestSubject.create("First", [
-          TestSubject.create("Second", [Work.create("Alpha", 90)])
+        const firstSubject = Subject.create("First", [
+          Subject.create("Second", [Work.create("Alpha", 90)])
         ]);
 
         expect(firstSubject.hasSubjects).toBe(true);
@@ -134,30 +134,27 @@ describe("Subject", () => {
     });
   });
 
-  describe("item sorting", () => {
+  describe("item order", () => {
     describe("when the items are works", () => {
-      it("should be applied", () => {
-        const subject = TestSubject.create("My subject", TestWorks.scrambled);
+      it("should be preserved", () => {
+        const subject = Subject.create("My subject", TestWorks.scrambled);
 
-        expect(subject.items.toArray()).toEqual(TestWorks.sorted);
+        expect(subject.items.toArray()).toEqual(TestWorks.scrambled);
       });
     });
 
     describe("when the items are subjects", () => {
-      it("should be applied", () => {
-        const subject = TestSubject.create(
-          "My subject",
-          TestSubjects.scrambled
-        );
+      it("should be preserved", () => {
+        const subject = Subject.create("My subject", TestSubjects.scrambled);
 
-        expect(subject.items.toArray()).toEqual(TestSubjects.sorted);
+        expect(subject.items.toArray()).toEqual(TestSubjects.scrambled);
       });
     });
   });
 
   describe("when the items are works", () => {
     const factory = (kind: string) =>
-      TestSubject.create("My subject", [
+      Subject.create("My subject", [
         Work.create("Alpha", 90),
         Work.create("Beta", 98, { kind })
       ]);
@@ -170,9 +167,9 @@ describe("Subject", () => {
 
   describe("when the items are subjects having works", () => {
     const factory = (changingWorkTitle: string) =>
-      TestSubject.create("My subject", [
-        TestSubject.create("Alpha", [Work.create("X", 3), Work.create("Y", 4)]),
-        TestSubject.create("Beta", [Work.create(changingWorkTitle, 7)])
+      Subject.create("My subject", [
+        Subject.create("Alpha", [Work.create("X", 3), Work.create("Y", 4)]),
+        Subject.create("Beta", [Work.create(changingWorkTitle, 7)])
       ]);
 
     Equality.test(
@@ -183,15 +180,15 @@ describe("Subject", () => {
 
   describe("when the items are subjects with nesting", () => {
     const factory = (tauSubjectName: string) =>
-      TestSubject.create("My subject", [
-        TestSubject.create("Alpha", [
-          TestSubject.create("Ro", [Work.create("X", 3), Work.create("Y", 4)]),
-          TestSubject.create("Sigma", [Work.create("Z", 7)])
+      Subject.create("My subject", [
+        Subject.create("Alpha", [
+          Subject.create("Ro", [Work.create("X", 3), Work.create("Y", 4)]),
+          Subject.create("Sigma", [Work.create("Z", 7)])
         ]),
 
-        TestSubject.create("Beta", [
-          TestSubject.create(tauSubjectName, [Work.create("A", 90)]),
-          TestSubject.create("Omega", [Work.create("B", 18)])
+        Subject.create("Beta", [
+          Subject.create(tauSubjectName, [Work.create("A", 90)]),
+          Subject.create("Omega", [Work.create("B", 18)])
         ])
       ]);
 
@@ -204,18 +201,16 @@ describe("Subject", () => {
   describe("when one subject has subjects and the other has works", () =>
     Equality.test(
       () =>
-        TestSubject.create("Alpha", [
-          TestSubject.create("Beta", [Work.create("Gamma", 20)])
+        Subject.create("Alpha", [
+          Subject.create("Beta", [Work.create("Gamma", 20)])
         ]),
-      () => TestSubject.create("Alpha", [Work.create("Beta", 10)])
+      () => Subject.create("Alpha", [Work.create("Beta", 10)])
     ));
 
   JsonConversion.testRoundTrip(Subject, SubjectJson, () =>
-    TestSubject.create("Alpha", [
-      TestSubject.create("Beta", TestWorks.scrambled),
-      TestSubject.create("Gamma", [
-        TestSubject.create("Delta", TestWorks.scrambled)
-      ])
+    Subject.create("Alpha", [
+      Subject.create("Beta", TestWorks.scrambled),
+      Subject.create("Gamma", [Subject.create("Delta", TestWorks.scrambled)])
     ])
   );
 });

@@ -2,13 +2,12 @@ import { RSet } from "@rimbu/collection-types";
 import { Reducer } from "@rimbu/common";
 import { OrderedHashSet } from "@rimbu/ordered";
 import { HasEquals } from "@giancosta86/swan-lake";
-import { LocaleLike } from "@giancosta86/hermes";
 import { Iterable } from "@giancosta86/stream-utils";
 import { SubjectJson, WorkJson } from "@/json";
 import { TaxonomyLevel } from "./TaxonomyLevel";
 import { Work } from "./Work";
-import { SubjectSet } from "./SubjectSet";
-import { WorkSet } from "./WorkSet";
+import { Subjects } from "./Subjects";
+import { Works } from "./Works";
 
 type SubjectParams = Readonly<{
   name: string;
@@ -19,7 +18,6 @@ type SubjectParams = Readonly<{
 
 export class Subject implements TaxonomyLevel, HasEquals {
   static create(
-    locale: LocaleLike,
     name: string,
     items: Iterable<Subject> | Iterable<Work>
   ): Subject {
@@ -37,12 +35,19 @@ export class Subject implements TaxonomyLevel, HasEquals {
 
     const hasSubjects = firstItem instanceof Subject;
 
-    const itemSet = hasSubjects
-      ? SubjectSet.createSorted(
-          locale,
-          items as Iterable<Subject>
-        ).assumeNonEmpty()
-      : WorkSet.createSorted(locale, items as Iterable<Work>).assumeNonEmpty();
+    let itemSet:
+      | OrderedHashSet.NonEmpty<Subject>
+      | OrderedHashSet.NonEmpty<Work>;
+
+    if (hasSubjects) {
+      const subjectIterable = items as Iterable<Subject>;
+      Subjects.ensureNoDuplicates(subjectIterable);
+      itemSet = OrderedHashSet.from(subjectIterable).assumeNonEmpty();
+    } else {
+      const workIterable = items as Iterable<Work>;
+      Works.ensureNoDuplicates(workIterable);
+      itemSet = OrderedHashSet.from(workIterable).assumeNonEmpty();
+    }
 
     const minutes = itemSet
       .stream()

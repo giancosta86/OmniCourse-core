@@ -6,7 +6,7 @@ import { WorkJson } from "@/json";
 import { Work } from "./Work";
 
 describe("Work", () => {
-  describe("constructor", () => {
+  describe("creation", () => {
     describe("when passing just the basic parameters", () => {
       it("should work", () => {
         const title = "My title";

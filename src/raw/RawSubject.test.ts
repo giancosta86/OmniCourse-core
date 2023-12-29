@@ -1,6 +1,6 @@
 import { Dictionary } from "@giancosta86/hermes";
-import { Test, TestSubject } from "@/test";
-import { Work } from "@/core";
+import { Test } from "@/test";
+import { Subject, Work } from "@/core";
 import { RawSubject } from "./RawSubject";
 import { RawWorks } from "./RawWorks";
 
@@ -72,9 +72,9 @@ describe("Raw subject", () => {
         ]);
 
         expect(subject).toEqual(
-          TestSubject.create("MySubject", [
-            Work.create("Alpha", 95),
-            Work.create("Beta", 98)
+          Subject.create("MySubject", [
+            Work.create("Beta", 98),
+            Work.create("Alpha", 95)
           ])
         );
       });
@@ -91,9 +91,9 @@ describe("Raw subject", () => {
         ]);
 
         expect(subject).toEqual(
-          TestSubject.create("MySubject", [
-            TestSubject.create("S2", [Work.create("Alpha", 95)]),
-            TestSubject.create("S3", [Work.create("Beta", 98)])
+          Subject.create("MySubject", [
+            Subject.create("S3", [Work.create("Beta", 98)]),
+            Subject.create("S2", [Work.create("Alpha", 95)])
           ])
         );
       });

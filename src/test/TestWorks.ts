@@ -1,13 +1,7 @@
-import { SortedSet } from "@rimbu/sorted";
 import { IsoDate } from "@giancosta86/time-utils";
-import { WorkSet, Work } from "@/core";
-import { Test } from "./settings";
+import { Work } from "@/core";
 
 export namespace TestWorks {
-  export function createSortedSet(works: Iterable<Work>): SortedSet<Work> {
-    return WorkSet.createSorted(Test.locale, works);
-  }
-
   const averageLongWithoutCompletionDate = Work.create(
     "Average long without completion date",
     90

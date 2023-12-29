@@ -2,7 +2,6 @@ import { RawTaxonomy } from "@/raw";
 
 export namespace TestRawTaxonomy {
   export const instance: RawTaxonomy = {
-    locale: "en",
     name: "Test taxonomy",
 
     rootSubjects: {

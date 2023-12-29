@@ -1,32 +1,23 @@
-import { SortedSet } from "@rimbu/sorted";
-import { Subject, Work, SubjectSet } from "@/core";
-import { Test } from "./settings";
-import { TestSubject } from "./TestSubject";
+import { Subject, Work } from "@/core";
 
 export namespace TestSubjects {
-  export function createSortedSet(
-    subjects: Iterable<Subject>
-  ): SortedSet<Subject> {
-    return SubjectSet.createSorted(Test.locale, subjects);
-  }
-
-  const longestSubject = TestSubject.create("Longest subject", [
+  const longestSubject = Subject.create("Longest subject", [
     Work.create("Alpha", 324),
     Work.create("Beta", 418)
   ]);
 
-  const longestSubjectHavingSuffixInTitle = TestSubject.create(
+  const longestSubjectHavingSuffixInTitle = Subject.create(
     longestSubject.name + " - and suffix",
     longestSubject.items
   );
 
-  const shortestSubject = TestSubject.create("Shortest subject", [
+  const shortestSubject = Subject.create("Shortest subject", [
     Work.create("Gamma", 2),
     Work.create("Delta", 1),
     Work.create("Epsilon", 3)
   ]);
 
-  const shortestSubjectHavingSuffixInTitle = TestSubject.create(
+  const shortestSubjectHavingSuffixInTitle = Subject.create(
     shortestSubject.name + " - and suffix",
     shortestSubject.items
   );

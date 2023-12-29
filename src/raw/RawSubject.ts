@@ -27,13 +27,13 @@ export namespace RawSubject {
     [name, items]: RawSubject
   ): Subject | null {
     const reifiedItems = Iterable.isSupported(items)
-      ? RawWorks.reify(items as RawWorks)
+      ? RawWorks.reify(locale, items as RawWorks)
       : RawSubjects.reify(locale, items as RawSubjects);
 
     if (Iterable.isEmpty(reifiedItems)) {
       return null;
     }
 
-    return Subject.create(locale, name, reifiedItems);
+    return Subject.create(name, reifiedItems);
   }
 }

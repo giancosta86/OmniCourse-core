@@ -1,12 +1,13 @@
 import { IsoDate } from "@giancosta86/time-utils";
 import { ExpressiveUrl } from "@giancosta86/swan-lake";
 import { Work } from "@/core";
+import { Test } from "@/test";
 import { RawWorks } from "./RawWorks";
 
 describe("Raw works", () => {
   describe("reification", () => {
-    it("should return Work instances in the given order", () => {
-      const works = RawWorks.reify([
+    it("should return Work instances in sorted order", () => {
+      const works = RawWorks.reify(Test.locale, [
         {
           title: "Alpha",
           minutes: 90
@@ -26,11 +27,11 @@ describe("Raw works", () => {
       ]);
 
       expect(works).toEqualSequence([
-        Work.create("Alpha", 90),
-        Work.create("Beta", 92, { completionDate: new IsoDate("1998-06-13") }),
         Work.create("Gamma", 95, {
           url: ExpressiveUrl.create("https://gianlucacosta.info/")
-        })
+        }),
+        Work.create("Alpha", 90),
+        Work.create("Beta", 92, { completionDate: new IsoDate("1998-06-13") })
       ]);
     });
   });

@@ -8,24 +8,15 @@ export type TaxonomyReifier = (
 ) => ImmediateOrPromise<Taxonomy>;
 
 export type RawTaxonomy = Readonly<{
-  locale: LocaleLike;
   name: string;
   rootSubjects: RawSubjects;
 }>;
 
 export namespace RawTaxonomy {
   export function localize(
-    locale: LocaleLike,
     dictionary: Dictionary,
     source: RawTaxonomy
   ): RawTaxonomy {
-    if (
-      LocaleLike.toLanguageTag(locale) ==
-      LocaleLike.toLanguageTag(source.locale)
-    ) {
-      return source;
-    }
-
     const localizedName = dictionary.translate(source.name);
 
     const localizedRootSubjects = RawSubjects.localize(
@@ -34,14 +25,17 @@ export namespace RawTaxonomy {
     );
 
     return {
-      locale,
       name: localizedName,
       rootSubjects: localizedRootSubjects
     };
   }
 
-  export function reify({ locale, name, rootSubjects }: RawTaxonomy): Taxonomy {
+  export function reify(
+    locale: LocaleLike,
+    { name, rootSubjects }: RawTaxonomy
+  ): Taxonomy {
     const reifiedRootSubjects = RawSubjects.reify(locale, rootSubjects);
-    return Taxonomy.create(locale, name, reifiedRootSubjects);
+
+    return Taxonomy.create(name, reifiedRootSubjects);
   }
 }

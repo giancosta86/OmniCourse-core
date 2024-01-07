@@ -1,6 +1,6 @@
 import { Work } from "@/core";
 
-export type WorkJson = Readonly<{
+export type WorkDto = Readonly<{
   title: string;
   minutes: number;
   kind?: string;
@@ -9,8 +9,8 @@ export type WorkJson = Readonly<{
   certificateUrl?: string;
 }>;
 
-export namespace WorkJson {
-  export function from(work: Work): WorkJson {
+export namespace WorkDto {
+  export function from(work: Work): WorkDto {
     return {
       title: work.title,
       minutes: work.minutes,

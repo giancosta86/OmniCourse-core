@@ -1,8 +1,8 @@
 import { ExpressiveUrl } from "@giancosta86/swan-lake";
 import { Equality } from "@giancosta86/more-jest";
 import { IsoDate } from "@giancosta86/time-utils";
-import { JsonConversion } from "@/test";
-import { WorkJson } from "@/json";
+import { DtoConversion } from "@/test";
+import { WorkDto } from "@/dto";
 import { Work } from "./Work";
 
 describe("Work", () => {
@@ -89,7 +89,7 @@ describe("Work", () => {
     () => Work.create("Basic work", 230)
   );
 
-  JsonConversion.testRoundTrip(Work, WorkJson, () =>
+  DtoConversion.testRoundTrip(Work, WorkDto, () =>
     Work.create("Dodo", 90, {
       kind: "Book",
       completionDate: new IsoDate("2008-12-06"),

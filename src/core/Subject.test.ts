@@ -1,6 +1,6 @@
 import { Equality } from "@giancosta86/more-jest";
-import { JsonConversion, TestSubjects, TestWorks } from "@/test";
-import { SubjectJson } from "@/json";
+import { DtoConversion, TestSubjects, TestWorks } from "@/test";
+import { SubjectDto } from "@/dto";
 import { Work } from "./Work";
 import { Subject } from "./Subject";
 
@@ -207,7 +207,7 @@ describe("Subject", () => {
       () => Subject.create("Alpha", [Work.create("Beta", 10)])
     ));
 
-  JsonConversion.testRoundTrip(Subject, SubjectJson, () =>
+  DtoConversion.testRoundTrip(Subject, SubjectDto, () =>
     Subject.create("Alpha", [
       Subject.create("Beta", TestWorks.scrambled),
       Subject.create("Gamma", [Subject.create("Delta", TestWorks.scrambled)])

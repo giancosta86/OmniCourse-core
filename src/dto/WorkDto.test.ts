@@ -1,9 +1,9 @@
 import { ExpressiveUrl } from "@giancosta86/swan-lake";
 import { IsoDate } from "@giancosta86/time-utils";
 import { Work } from "@/core";
-import { WorkJson } from "./WorkJson";
+import { WorkDto } from "./WorkDto";
 
-describe("Converting a Work to JSON", () => {
+describe("Converting a Work to a dto", () => {
   it("should preserve all the fields", () => {
     const work = Work.create("This is a test title", 90, {
       kind: "The work kind",
@@ -14,13 +14,13 @@ describe("Converting a Work to JSON", () => {
       )
     });
 
-    const workJson = WorkJson.from(work);
+    const dto = WorkDto.from(work);
 
-    expect(workJson.title).toBe(work.title);
-    expect(workJson.minutes).toBe(work.minutes);
-    expect(workJson.kind).toBe(work.kind);
-    expect(workJson.completionDate).toBe(work.completionDate?.toString());
-    expect(workJson.url).toBe(work.url?.toString());
-    expect(workJson.certificateUrl).toBe(work.certificateUrl?.toString());
+    expect(dto.title).toBe(work.title);
+    expect(dto.minutes).toBe(work.minutes);
+    expect(dto.kind).toBe(work.kind);
+    expect(dto.completionDate).toBe(work.completionDate?.toString());
+    expect(dto.url).toBe(work.url?.toString());
+    expect(dto.certificateUrl).toBe(work.certificateUrl?.toString());
   });
 });

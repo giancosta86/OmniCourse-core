@@ -3,7 +3,7 @@ import { Reducer } from "@rimbu/common";
 import { OrderedHashSet } from "@rimbu/ordered";
 import { HasEquals } from "@giancosta86/swan-lake";
 import { Iterable } from "@giancosta86/stream-utils";
-import { SubjectJson, WorkJson } from "@/json";
+import { SubjectDto, WorkDto } from "@/dto";
 import { TaxonomyLevel } from "./TaxonomyLevel";
 import { Work } from "./Work";
 import { Subjects } from "./Subjects";
@@ -62,19 +62,17 @@ export class Subject implements TaxonomyLevel, HasEquals {
     });
   }
 
-  static fromValidJson(subjectJson: SubjectJson): Subject {
+  static fromValidDto(dto: SubjectDto): Subject {
     return new Subject({
-      name: subjectJson.name,
-      hasSubjects: subjectJson.hasSubjects,
-      minutes: subjectJson.minutes,
-      items: subjectJson.hasSubjects
+      name: dto.name,
+      hasSubjects: dto.hasSubjects,
+      minutes: dto.minutes,
+      items: dto.hasSubjects
         ? OrderedHashSet.from(
-            (subjectJson.items as readonly SubjectJson[]).map(
-              Subject.fromValidJson
-            )
+            (dto.items as readonly SubjectDto[]).map(Subject.fromValidDto)
           ).assumeNonEmpty()
         : OrderedHashSet.from(
-            (subjectJson.items as readonly WorkJson[]).map(Work.fromValidJson)
+            (dto.items as readonly WorkDto[]).map(Work.fromValidDto)
           ).assumeNonEmpty()
     });
   }

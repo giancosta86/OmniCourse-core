@@ -4,7 +4,7 @@
 
 ## core
 
-- All the domain objects (`Work`, `Subject`, `Taxonomy`) now have a private constructor and a static `create()` method - and a subtler `fromJson()` method
+- All the domain objects (`Work`, `Subject`, `Taxonomy`) now have a private constructor and a static `create()` method - and a subtler `fromValidDto()` method
 
 - The `WorkComp` and `SubjectComp` namespaces with factory functions replace plain comparator functions
 
@@ -46,4 +46,4 @@
 
 - `toTaxonomy()` has been renamed to `RawTaxonomy.reify()`,
 
-- JSON serialization now supported via `WorkJson.from()`, `SubjectJson.from()` and `TaxonomyJson.from()`, as well as by the `fromJson()` static constructors
+- DTO serialization now supported via `WorkDto.from()`, `SubjectDto.from()` and `TaxonomyDto.from()`, as well as by the `fromValidDto()` static constructors

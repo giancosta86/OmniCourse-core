@@ -1,4 +1,4 @@
-export * from "./JsonConversion";
+export * from "./DtoConversion";
 
 export * from "./settings";
 

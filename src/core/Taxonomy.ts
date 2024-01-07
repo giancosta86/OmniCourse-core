@@ -2,7 +2,7 @@ import { Reducer } from "@rimbu/common";
 import { RSet } from "@rimbu/collection-types";
 import { OrderedHashSet } from "@rimbu/ordered";
 import { HasEquals, Optional } from "@giancosta86/swan-lake";
-import { TaxonomyJson } from "@/json";
+import { TaxonomyDto } from "@/dto";
 import { TaxonomyLevel } from "./TaxonomyLevel";
 import { Subject } from "./Subject";
 import { Subjects } from "./Subjects";
@@ -38,12 +38,12 @@ export class Taxonomy implements TaxonomyLevel, HasEquals {
     });
   }
 
-  static fromValidJson(taxonomyJson: TaxonomyJson): Taxonomy {
+  static fromValidDto(dto: TaxonomyDto): Taxonomy {
     return new Taxonomy({
-      name: taxonomyJson.name,
-      minutes: taxonomyJson.minutes,
+      name: dto.name,
+      minutes: dto.minutes,
       items: OrderedHashSet.from(
-        taxonomyJson.items.map(Subject.fromValidJson)
+        dto.items.map(Subject.fromValidDto)
       ).assumeNonEmpty()
     });
   }

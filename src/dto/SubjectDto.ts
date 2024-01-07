@@ -1,16 +1,16 @@
 import { RSet } from "@rimbu/collection-types";
 import { Subject, Work } from "@/core";
-import { WorkJson } from "./WorkJson";
+import { WorkDto } from "./WorkDto";
 
-export type SubjectJson = Readonly<{
+export type SubjectDto = Readonly<{
   name: string;
   hasSubjects: boolean;
   minutes: number;
-  items: readonly SubjectJson[] | readonly WorkJson[];
+  items: readonly SubjectDto[] | readonly WorkDto[];
 }>;
 
-export namespace SubjectJson {
-  export function from(subject: Subject): SubjectJson {
+export namespace SubjectDto {
+  export function from(subject: Subject): SubjectDto {
     return {
       name: subject.name,
       hasSubjects: subject.hasSubjects,
@@ -18,9 +18,9 @@ export namespace SubjectJson {
       items: subject.hasSubjects
         ? (subject.items as RSet<Subject>)
             .stream()
-            .map(SubjectJson.from)
+            .map(SubjectDto.from)
             .toArray()
-        : (subject.items as RSet<Work>).stream().map(WorkJson.from).toArray()
+        : (subject.items as RSet<Work>).stream().map(WorkDto.from).toArray()
     };
   }
 }

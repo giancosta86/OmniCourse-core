@@ -1,6 +1,6 @@
 import { Equality } from "@giancosta86/more-jest";
-import { TestSubjects, JsonConversion } from "@/test";
-import { TaxonomyJson } from "@/json";
+import { TestSubjects, DtoConversion } from "@/test";
+import { TaxonomyDto } from "@/dto";
 import { Work } from "./Work";
 import { Taxonomy } from "./Taxonomy";
 import { Subject } from "./Subject";
@@ -110,7 +110,7 @@ describe("Taxonomy", () => {
     );
   });
 
-  JsonConversion.testRoundTrip(Taxonomy, TaxonomyJson, () =>
+  DtoConversion.testRoundTrip(Taxonomy, TaxonomyDto, () =>
     Taxonomy.create("My taxonomy", TestSubjects.scrambled)
   );
 });

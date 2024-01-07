@@ -1,6 +1,6 @@
 import { ExpressiveUrl, HasEquals, Optional } from "@giancosta86/swan-lake";
 import { IsoDate } from "@giancosta86/time-utils";
-import { WorkJson } from "@/json";
+import { WorkDto } from "@/dto";
 
 type WorkParams = Readonly<
   {
@@ -42,20 +42,17 @@ export class Work implements HasEquals {
     });
   }
 
-  static fromValidJson(workJson: WorkJson): Work {
+  static fromValidDto(dto: WorkDto): Work {
     return new Work({
-      title: workJson.title,
-      minutes: workJson.minutes,
-      kind: workJson.kind,
+      title: dto.title,
+      minutes: dto.minutes,
+      kind: dto.kind,
       completionDate: Optional.map(
-        workJson.completionDate,
+        dto.completionDate,
         completionDate => new IsoDate(completionDate)
       ),
-      url: Optional.map(workJson.url, ExpressiveUrl.create),
-      certificateUrl: Optional.map(
-        workJson.certificateUrl,
-        ExpressiveUrl.create
-      )
+      url: Optional.map(dto.url, ExpressiveUrl.create),
+      certificateUrl: Optional.map(dto.certificateUrl, ExpressiveUrl.create)
     });
   }
 
